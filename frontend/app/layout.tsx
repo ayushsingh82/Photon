@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Caveat } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,16 +10,18 @@ const inter = Inter({
   display: "swap",
 });
 
-const caveat = Caveat({
+const display = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-caveat",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-display",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Yield — Cross-Chain Yield Aggregator",
+  title: "Photon — Cross-Chain Yield, in One Click",
   description:
-    "One-click DeFi yield. Social login. No bridges. No gas tokens. Powered by Particle Universal Accounts and Magic Labs.",
+    "Photon routes your deposit to the best DeFi yield across chains. Social login (Magic), chain-abstracted execution (Particle Universal Accounts), settled on Arbitrum via Aave & Morpho.",
 };
 
 export default function RootLayout({
@@ -27,14 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${inter.variable} ${display.variable}`}>
       <body className="min-h-screen bg-bg text-fg font-sans">
         <Nav />
         <main>{children}</main>
-        <footer className="border-t border-line mt-24 py-8 text-center text-muted text-sm">
-          Built for the{" "}
-          <span className="text-brand">Particle Network Hackathon</span>.
-        </footer>
+        <Footer />
       </body>
     </html>
   );

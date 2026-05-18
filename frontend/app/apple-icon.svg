@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="pg" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A500E6"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="180" height="180" rx="36" fill="#000000"/>
+  <circle cx="90" cy="90" r="34" fill="url(#pg)"/>
+  <circle cx="90" cy="90" r="62" stroke="#A500E6" stroke-opacity="0.5" stroke-width="8" fill="none"/>
+  <g stroke="#A500E6" stroke-width="11" stroke-linecap="round">
+    <path d="M90 18 v28"/>
+    <path d="M90 134 v28"/>
+    <path d="M18 90 h28"/>
+    <path d="M134 90 h28"/>
+  </g>
+</svg>
