@@ -1,7 +1,8 @@
-# PLANNING.md — Cross-Chain Yield Aggregator
+# PLANNING.md — Photon
 
+> **Project name:** Photon
 > **Hackathon target:** Particle Network Hackathon
-> **One-line pitch:** A social-login DeFi yield aggregator that auto-routes deposits cross-chain into the best Aave/Morpho APY, with gasless UX powered by Particle Universal Accounts.
+> **One-line pitch:** Photon is a social-login DeFi yield aggregator that auto-routes deposits cross-chain into the best Aave/Morpho APY, with gasless UX powered by Particle Universal Accounts.
 
 ---
 
@@ -102,7 +103,7 @@ If time permits, we add a thin `YieldRouter.sol` that batches `approve → bridg
 ## 6. Directory Layout
 
 ```
-yield-aggregator/
+photon/
 ├── PLANNING.md
 ├── README.md
 ├── frontend/                  # Next.js app
@@ -156,8 +157,8 @@ yield-aggregator/
 - **Background:** pure black `#000000`
 - **Foreground text:** white `#FFFFFF`
 - **Highlight / accent:** `#A500E6` (used for CTAs, links, APY numbers, focus rings)
-- **Headings:** mix — primary headings in a cursive display font (`"Caveat"` or `"Dancing Script"` from Google Fonts), body in `Inter`.
-- **Vibe:** minimalist, lots of whitespace, glow on hover.
+- **Headings:** sans body in `Inter`; the wordmark **Photon** and editorial accents use `Instrument Serif` italic — a modern, stylish display serif (Linear / Vercel style).
+- **Vibe:** minimalist, lots of whitespace, glow on hover, logo-rich.
 
 Tailwind tokens:
 ```ts
@@ -169,7 +170,7 @@ colors: {
 }
 fontFamily: {
   sans:    ['Inter', 'sans-serif'],
-  cursive: ['"Caveat"', 'cursive'],
+  display: ['"Instrument Serif"', 'Georgia', 'serif'],
 }
 ```
 
