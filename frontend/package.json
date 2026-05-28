@@ -9,9 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@magic-ext/oauth2": "^15.8.0",
+    "@particle-network/universal-account-sdk": "^1.1.1",
+    "ethers": "^6.16.0",
+    "magic-sdk": "^33.7.1",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "viem": "^2.51.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
