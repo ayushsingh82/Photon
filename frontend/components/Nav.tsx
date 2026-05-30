@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChainStack } from "@/components/Logo";
+import { ConnectButton } from "@/components/ConnectButton";
 
 export function Nav() {
   return (
@@ -35,12 +36,7 @@ export function Nav() {
           >
             Deposit
           </Link>
-          <Link
-            href="/deposit"
-            className="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-glow transition hover:brightness-110"
-          >
-            Launch app →
-          </Link>
+          <ConnectButton />
         </nav>
       </div>
     </header>

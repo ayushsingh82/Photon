@@ -3,6 +3,9 @@
 import { useMemo, useState } from "react";
 import { ChainLogo, ProtocolLogo, TokenLogo } from "@/components/Logo";
 import type { ChainSlug, TokenSymbol } from "@/lib/assets";
+import { useApy } from "@/hooks/useApy";
+import { useSession } from "@/store/session";
+import { CHAIN_SLUG } from "@/lib/chains";
 
 const assets: TokenSymbol[] = ["USDC", "USDT", "ETH"];
 const chains: ChainSlug[] = [
@@ -14,13 +17,23 @@ const chains: ChainSlug[] = [
 ];
 
 type ProtocolSlug = "aave" | "morpho";
-const bestRoute: Record<
-  TokenSymbol,
-  { chain: ChainSlug; protocol: ProtocolSlug; protocolName: string; apy: number }
-> = {
+type RouteView = {
+  chain: ChainSlug;
+  protocol: ProtocolSlug;
+  protocolName: string;
+  apy: number;
+};
+
+// Static fallback shown while the live DefiLlama route is loading.
+const fallbackRoute: Record<TokenSymbol, RouteView> = {
   USDC: { chain: "arbitrum", protocol: "aave", protocolName: "Aave v3", apy: 4.81 },
   USDT: { chain: "arbitrum", protocol: "aave", protocolName: "Aave v3", apy: 5.12 },
   ETH: { chain: "arbitrum", protocol: "morpho", protocolName: "Morpho Blue", apy: 3.92 },
+};
+
+const PROTOCOL_NAME: Record<"aave-v3" | "morpho-blue", { slug: ProtocolSlug; name: string }> = {
+  "aave-v3": { slug: "aave", name: "Aave v3" },
+  "morpho-blue": { slug: "morpho", name: "Morpho Blue" },
 };
 
 export default function DepositPage() {
@@ -28,13 +41,45 @@ export default function DepositPage() {
   const [fromChain, setFromChain] = useState<ChainSlug>("base");
   const [amount, setAmount] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
+  const [txId, setTxId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const route = bestRoute[asset];
+  const { user, deposit } = useSession();
+
+  // Live best route from DefiLlama; fall back to the static map while loading.
+  const { route: liveRoute } = useApy(asset);
+  const route: RouteView = useMemo(() => {
+    if (!liveRoute) return fallbackRoute[asset];
+    const meta = PROTOCOL_NAME[liveRoute.pool.protocol];
+    return {
+      chain: (CHAIN_SLUG[liveRoute.pool.chainId] as ChainSlug) ?? "arbitrum",
+      protocol: meta.slug,
+      protocolName: meta.name,
+      apy: liveRoute.estApy,
+    };
+  }, [liveRoute, asset]);
+
   const yearly = useMemo(() => {
     const n = parseFloat(amount);
     if (!n || isNaN(n)) return 0;
     return n * (route.apy / 100);
   }, [amount, route.apy]);
+
+  async function handleDeposit() {
+    setError(null);
+    if (!user) {
+      setError("Connect your account (top right) to deposit.");
+      return;
+    }
+    setSubmitted(true);
+    try {
+      const id = await deposit({ asset, amount });
+      setTxId(id);
+    } catch (e) {
+      setError((e as Error).message);
+      setSubmitted(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -160,19 +205,35 @@ export default function DepositPage() {
 
         {/* CTA */}
         <button
-          disabled={!amount || parseFloat(amount) <= 0}
-          onClick={() => setSubmitted(true)}
+          disabled={!amount || parseFloat(amount) <= 0 || (submitted && !txId)}
+          onClick={() => void handleDeposit()}
           className="mt-8 w-full rounded-full bg-brand py-4 text-base font-medium text-white shadow-glow transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
-          {submitted
+          {submitted && !txId
             ? "Routing your deposit…"
-            : `Deposit ${amount || "0"} ${asset} →`}
+            : !user
+              ? `Connect & deposit ${amount || "0"} ${asset} →`
+              : `Deposit ${amount || "0"} ${asset} →`}
         </button>
 
-        {submitted && (
+        {error && (
+          <p className="mt-3 text-center text-sm text-red-400">{error}</p>
+        )}
+
+        {txId && (
           <p className="mt-3 text-center text-sm text-muted">
-            (Demo) In production this builds a Universal Transaction via
-            Particle and confirms on <span className="capitalize text-fg">{route.chain}</span>.
+            Universal Transaction submitted via Particle on{" "}
+            <span className="capitalize text-fg">{route.chain}</span> ·{" "}
+            <span className="font-mono text-xs text-fg">
+              {txId.slice(0, 10)}…
+            </span>
+          </p>
+        )}
+
+        {submitted && !txId && !error && (
+          <p className="mt-3 text-center text-sm text-muted">
+            Building Universal Transaction · sourcing {asset}, bridging and
+            sponsoring gas…
           </p>
         )}
       </div>
