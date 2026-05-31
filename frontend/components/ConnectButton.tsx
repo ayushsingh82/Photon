@@ -13,6 +13,7 @@ export function ConnectButton() {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   if (user) {
     return (
@@ -86,11 +87,24 @@ export function ConnectButton() {
             <span className="h-px flex-1 bg-line" /> or <span className="h-px flex-1 bg-line" />
           </div>
           <button
-            onClick={() => void loginWithGoogle()}
+            onClick={async () => {
+              setErr(null);
+              try {
+                await loginWithGoogle();
+              } catch (e) {
+                const m = (e as Error).message ?? "";
+                setErr(
+                  /route not enabled|not supported/i.test(m)
+                    ? "Google isn't enabled on this Magic app yet — use email above, or enable Google in the Magic dashboard."
+                    : m || "Google login failed",
+                );
+              }
+            }}
             className="w-full rounded-xl border border-line py-2 text-sm transition hover:border-brand hover:text-fg"
           >
             Continue with Google
           </button>
+          {err && <p className="mt-2 text-xs text-red-400">{err}</p>}
           <p className="mt-3 text-[10px] leading-relaxed text-muted">
             Seedless login by Magic. Your Universal Account is provisioned by
             Particle Network on first sign-in.
