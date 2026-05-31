@@ -36,6 +36,12 @@ export function Nav() {
           >
             Deposit
           </Link>
+          <Link
+            href="/docs"
+            className="text-muted transition hover:text-fg"
+          >
+            Docs
+          </Link>
           <ConnectButton />
         </nav>
       </div>
