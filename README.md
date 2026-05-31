@@ -165,13 +165,15 @@ npm run lint    # eslint
 
 ```
 photon/
-├── PLANNING.md                 # architecture, milestones, risks
 ├── README.md                   # you are here
+├── assets/logo.svg             # brand mark
 └── frontend/
+    ├── PLANNING.md             # architecture, milestones, risks
     ├── app/                    # App Router routes
     │   ├── page.tsx            #   landing
     │   ├── deposit/            #   live deposit flow (best route + Universal Tx)
-    │   └── dashboard/          #   positions, top pools, activity
+    │   ├── dashboard/          #   live positions, balance, top pools
+    │   └── docs/               #   what we build: stack, architecture, addresses
     ├── components/
     │   ├── ConnectButton.tsx   #   Magic login / account chip
     │   ├── SessionProvider.tsx #   restores session on load
@@ -182,6 +184,7 @@ photon/
         ├── magic.ts            #   seedless login + ethers signer
         ├── particle.ts         #   Universal Account: provision, balance, deposit
         ├── aave.ts             #   Aave v3 supply/withdraw calldata (viem)
+        ├── positions.ts        #   on-chain Aave positions + pricing
         ├── apy.ts              #   DefiLlama yields → best route
         └── chains.ts           #   chain / token / protocol registries
 ```
@@ -197,7 +200,7 @@ photon/
 - [ ] Auto-rebalance when the best APY moves
 - [ ] Morpho Blue market selection by collateral
 
-See [`PLANNING.md`](./PLANNING.md) for the full design and non-goals.
+See [`PLANNING.md`](./frontend/PLANNING.md) for the full design and non-goals.
 
 ---
 
