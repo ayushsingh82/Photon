@@ -1,6 +1,8 @@
 <div align="center">
 
-# ⚡ Photon
+<img src="assets/logo.svg" width="96" height="96" alt="Photon logo" />
+
+# Photon
 
 ### Cross-chain DeFi yield, in one click.
 
